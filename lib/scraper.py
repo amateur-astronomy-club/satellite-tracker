@@ -1,3 +1,6 @@
+#This is a fork from http://www.sharebrained.com/2011/10/18/track-the-iss-pyephem/
+#Lots of changes to be made
+
 import math
 import time
 from datetime import datetime
