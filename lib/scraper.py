@@ -9,10 +9,14 @@ import ephem
 degrees_per_radian = 180.0 / math.pi
 
 home = ephem.Observer()
+#Lat and Long set to my home location. Either get values of NITK through Google Maps or automate that as well
+#Doesn't really matter. These values can be fed by us
+#http://jsfiddle.net/0b0az4fr/ <- Use this to get lat long of any location and feed below
 
 home.lon = '74.7421430'   # +E
-home.lat = '13.3408810'      # +N
+home.lat = '13.3408810'   # +N
 home.elevation = 0 # meters
+
 
 print home
 # Always get the latest ISS TLE data from:
@@ -21,7 +25,7 @@ iss = ephem.readtle('ISS',
                     '1 25544U 98067A   16274.50033672  .00016717  00000-0  10270-3 0  9003',
                     '2 25544  51.6383 252.7108 0006713  21.8902 338.2536 15.54019889 21364'
                    )
-
+#test values.To be interfaced with GUI and the bash script later
 hst = ephem.readtle('HST',
                     '1 20580U 90037B   16274.23805914  .00001113  00000-0  58355-4 0  9992',
                     '2 20580  28.4700 284.9185 0002511 256.0834 203.4566 15.08518057250982')
