@@ -1,38 +1,75 @@
-#This is a fork from http://www.sharebrained.com/2011/10/18/track-the-iss-pyephem/
-#Lots of changes to be made
-
 import math
 import time
 from datetime import datetime
 import ephem
+import os
+from pathlib import Path
+
 
 degrees_per_radian = 180.0 / math.pi
 
-home = ephem.Observer()
-#Lat and Long set to my home location. Either get values of NITK through Google Maps or automate that as well
-#Doesn't really matter. These values can be fed by us
-#http://jsfiddle.net/0b0az4fr/ <- Use this to get lat long of any location and feed below
 
-home.lon = '74.7421430'   # +E
-home.lat = '13.3408810'   # +N
-home.elevation = 0 # meters
+def setDefaultHome():
+	home = ephem.Observer()
+	home.lon = '0.0000'   # +E
+	home.lat = '0.0000'      # +N
+	home.elevation = 0 # meters
+	return home
+	
+def setNITKHome():
+	home = ephem.Observer()
+	home.lon = '74.7937'   # +E
+	home.lat = '13.0119'      # +N
+	home.elevation = 24 # meters
+	return home
+	
+def setCurrentHome():
+	home = ephem.Observer()
+	#TODO: Get current location
+	return home
 
+def printCoordintes(index,home):
+	TLEfileExists = Path("./TLE/" + index + '.txt')
+	if (TLEfileExists.is_file() == False):
+		os.system('./GetTLE.sh '+ index)
+		
+	tlefile=open('./TLE/'+ index + '.txt', 'r').read()
+	tlesplit=tlefile.split('\n')
+	
+	assert len(tlesplit) >= 3
+	
+	sat = ephem.readtle(index,tlesplit[1],tlesplit[2])
 
-print home
-# Always get the latest ISS TLE data from:
-# http://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/orbit/ISS/SVPOST.html
-iss = ephem.readtle('ISS',
-                    '1 25544U 98067A   16274.50033672  .00016717  00000-0  10270-3 0  9003',
-                    '2 25544  51.6383 252.7108 0006713  21.8902 338.2536 15.54019889 21364'
-                   )
-#test values.To be interfaced with GUI and the bash script later
-hst = ephem.readtle('HST',
-                    '1 20580U 90037B   16274.23805914  .00001113  00000-0  58355-4 0  9992',
-                    '2 20580  28.4700 284.9185 0002511 256.0834 203.4566 15.08518057250982')
+   	while True:
+    		home.date = datetime.utcnow()
+    		sat.compute(home)
+    		print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
+                                                         sat.az * degrees_per_radian)
+    		time.sleep(1)
+    		
+def convertToIndex (SateliteName):
+	#TODO: Given satellite name, convert to index (use dictionary)   		
+    		
+def sendCoordinates(index , home):
+	#Get TLE and convert to coordinates, send to arduino
+	TLEfileExists = Path("./TLE/" + index + '.txt')
+	if (TLEfileExists.is_file() == False):
+		os.system('./GetTLE.sh '+ index)
+		
+	tlefile=open('./TLE/'+ index + '.txt', 'r').read()
+	tlesplit=tlefile.split('\n')
+	
+	assert len(tlesplit) >= 3
+	
+	sat = ephem.readtle(index,tlesplit[1],tlesplit[2])
 
-while True:
-    home.date = datetime.utcnow()
-    hst.compute(home)
-    print '\rhst: altitude %4.1f deg, azimuth %5.1f deg'% (hst.alt * degrees_per_radian,
-                                                         hst.az * degrees_per_radian)
-    time.sleep(1)
+   	while True:
+    		home.date = datetime.utcnow()
+    		sat.compute(home)
+    		#TODO: Convert this to sending it to arduino, maybe add arguments
+    		#print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
+                                                         sat.az * degrees_per_radian)
+    		time.sleep(1)
+    		
+home = setNITKHome()
+printCoordinates('00005',home)    		
