@@ -77,6 +77,7 @@ def sendCoordinates(index , home):
     		#print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
                 #                                         sat.az * degrees_per_radian)
     		time.sleep(1)
-
-home = setNITKHome()
-printCoordinates('00005',home)
+            
+if __name__ == '__main__':
+    home = setNITKHome()
+    printCoordinates('00005',home)
