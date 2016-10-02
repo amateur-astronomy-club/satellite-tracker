@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 
 #use this as reference for all paths henceforth.
+#ensure we use absolute paths with reference to project home directory everywhere
 # So that no errors are thrown when we run a script as say python ./lib/scraper.py from tracker home directory
 project_home = Path("../")
 #edit at all places
