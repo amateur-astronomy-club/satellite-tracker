@@ -28,7 +28,7 @@ def setCurrentHome():
 	#TODO: Get current location
 	return home
 
-def printCoordintes(index,home):
+def printCoordinates(index,home):
 	TLEfileExists = Path("./TLE/" + index + '.txt')
 	if (TLEfileExists.is_file() == False):
 		os.system('./GetTLE.sh '+ index)
@@ -48,10 +48,11 @@ def printCoordintes(index,home):
     		time.sleep(1)
     		
 def convertToIndex (SateliteName):
-	#TODO: Given satellite name, convert to index (use dictionary)   		
+	#TODO: Given satellite name, convert to index (use dictionary)   
+	print ('todo');		
     		
 def sendCoordinates(index , home):
-	#Get TLE and convert to coordinates, send to arduino
+        #Get TLE and convert to coordinates, send to arduino
 	TLEfileExists = Path("./TLE/" + index + '.txt')
 	if (TLEfileExists.is_file() == False):
 		os.system('./GetTLE.sh '+ index)
@@ -68,7 +69,7 @@ def sendCoordinates(index , home):
     		sat.compute(home)
     		#TODO: Convert this to sending it to arduino, maybe add arguments
     		#print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
-                                                         sat.az * degrees_per_radian)
+                #                                         sat.az * degrees_per_radian)
     		time.sleep(1)
     		
 home = setNITKHome()
