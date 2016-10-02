@@ -1,6 +1,3 @@
-#fork of http://blog.thetelegraphic.com/2012/gps-sattelite-tracking-in-python-using-pyephem/
-#just something that can be added
-
 import numpy as np
 import matplotlib.pyplot as plt
 import ephem
