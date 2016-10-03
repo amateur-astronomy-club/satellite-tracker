@@ -4,17 +4,11 @@ from datetime import datetime
 import ephem
 import os
 from pathlib import Path
-
-#use this as reference for all paths henceforth.
-#ensure we use absolute paths with reference to project home directory everywhere
-# So that no errors are thrown when we run a script as say python ./lib/scraper.py from tracker home directory
-project_home = Path("../")
-#edit at all places
-
+from auromat.coordinates.spacetrack import Spacetrack
 
 degrees_per_radian = 180.0 / math.pi
 
-
+#change all . to respective folder
 def setDefaultHome():
 	home = ephem.Observer()
 	home.lon = '0.0000'   # +E
@@ -34,10 +28,19 @@ def setCurrentHome():
 	#TODO: Get current location
 	return home
 
+def getnewtle(index):
+	#API credentials
+	newsat = Spacetrack("asavari.limaye@gmail.com","2016AACNITK2017")
+	tledata = newsat.query("class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false"%index)
+
+	writefile = Path("./TLE/" + index + '.txt')
+
+
+
 def printCoordinates(index,home):
 	TLEfileExists = Path("./TLE/" + index + '.txt')
 	if (TLEfileExists.is_file() == False):
-		os.system('./GetTLE.sh '+ index)
+		getnewtle(index);
 
 	tlefile=open('./TLE/'+ index + '.txt', 'r').read()
 	tlesplit=tlefile.split('\n')
@@ -61,7 +64,7 @@ def sendCoordinates(index , home):
         #Get TLE and convert to coordinates, send to arduino
 	TLEfileExists = Path("./TLE/" + index + '.txt')
 	if (TLEfileExists.is_file() == False):
-		os.system('./GetTLE.sh '+ index)
+		getnewtle(index)
 
 	tlefile=open('./TLE/'+ index + '.txt', 'r').read()
 	tlesplit=tlefile.split('\n')
@@ -77,7 +80,7 @@ def sendCoordinates(index , home):
     		#print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
                 #                                         sat.az * degrees_per_radian)
     		time.sleep(1)
-            
+
 if __name__ == '__main__':
     home = setNITKHome()
-    printCoordinates('00005',home)
+    printCoordinates('25544',home)
