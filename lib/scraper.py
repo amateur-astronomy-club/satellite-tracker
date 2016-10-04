@@ -33,14 +33,16 @@ def getnewtle(index):
 	newsat = Spacetrack("asavari.limaye@gmail.com","2016AACNITK2017")
 	tledata = newsat.query("class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false"%index)
 
-	writefile = Path("./TLE/" + index + '.txt')
+	writefile = open("./TLE/" + index + '.txt',"w")
+	writefile.write(tledata)
+	writefile.close()
 
 
 
 def printCoordinates(index,home):
 	TLEfileExists = Path("./TLE/" + index + '.txt')
 	if (TLEfileExists.is_file() == False):
-		getnewtle(index);
+		getnewtle(index)
 
 	tlefile=open('./TLE/'+ index + '.txt', 'r').read()
 	tlesplit=tlefile.split('\n')
@@ -83,4 +85,4 @@ def sendCoordinates(index , home):
 
 if __name__ == '__main__':
     home = setNITKHome()
-    printCoordinates('25544',home)
+    printCoordinates('26702',home)

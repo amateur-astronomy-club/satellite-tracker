@@ -6,8 +6,8 @@ import datetime
 # Setup lat long of telescope
 home = ephem.Observer()
 
-home.lon = '74.7421430'  # +E
-home.lat = '13.3408810'     # +N
+home.long = np.deg2rad(74.7421430)  # +E
+home.lat = np.deg2rad(13.3408810)     # +N
 home.elevation = 0 # meters
 home.date = datetime.datetime.now()
 print home
@@ -41,7 +41,7 @@ for date in dt:
     sat_az.append(np.rad2deg(iss.az))
 
 # Plot satellite tracks
-plt.subplot(211)
+'''plt.subplot(211)
 plt.plot(dt, sat_alt)
 plt.ylabel("Altitude (deg)")
 plt.xticks(rotation=25)
@@ -49,7 +49,7 @@ plt.subplot(212)
 plt.plot(dt, sat_az)
 plt.ylabel("Azimuth (deg)")
 plt.xticks(rotation=25)
-plt.show()
+plt.show()'''
 
 # Plot satellite track in polar coordinates
 plt.polar(np.deg2rad(sat_az), 90-np.array(sat_alt))

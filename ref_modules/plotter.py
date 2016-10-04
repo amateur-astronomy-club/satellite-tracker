@@ -29,12 +29,14 @@ dt  = [midnight + datetime.timedelta(minutes=20*x) for x in range(0, 24*3)]
 sat_alt, sat_az = [], []
 for date in dt:
     oxford.date = date
-    biif1.compute(oxford)
-    sat_alt.append(np.rad2deg(biif1.alt))
-    sat_az.append(np.rad2deg(biif1.az))
+    iss.compute(oxford)
+    sat_alt.append(np.rad2deg(iss.alt))
+    sat_az.append(np.rad2deg(iss.az))
+    sat_lat.append(np.rad2deg(iss.lat))
+    sat_az.append(np.rad2deg(iss.lon))
 
 # Plot satellite tracks
-plt.subplot(211)
+'''plt.subplot(211)
 plt.plot(dt, sat_alt)
 plt.ylabel("Altitude (deg)")
 plt.xticks(rotation=25)
@@ -42,7 +44,7 @@ plt.subplot(212)
 plt.plot(dt, sat_az)
 plt.ylabel("Azimuth (deg)")
 plt.xticks(rotation=25)
-plt.show()
+plt.show()'''
 
 # Plot satellite track in polar coordinates
 plt.polar(np.deg2rad(sat_az), 90-np.array(sat_alt))
