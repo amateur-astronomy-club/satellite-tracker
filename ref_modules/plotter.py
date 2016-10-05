@@ -3,6 +3,7 @@ import pylab as plt
 import ephem
 import datetime
 
+
 # Setup lat long of telescope
 oxford = ephem.Observer()
 oxford.lat = np.deg2rad(51.75)

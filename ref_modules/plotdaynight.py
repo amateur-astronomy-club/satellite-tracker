@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 
 import ephem
 import datetime
+from datetime import timedelta
 
 # Setup lat long of telescope
 home = ephem.Observer()
@@ -21,23 +22,32 @@ iss = ephem.readtle('ISS',
                    )
 
 # Make some datetimes
-midnight = datetime.datetime.replace(datetime.datetime.now())
-dt  = [midnight + datetime.timedelta(seconds=1*x) for x in range(0, 24*60*60)]
-
+current_time = datetime.datetime.now()
+past_time = current_time + timedelta(hours=-1)
+dt  = [current_time + timedelta(seconds=1*x) for x in range(0, 24*60*60)]
+dt_past = [past_time + timedelta(seconds=1*x) for x in range(0, 60*60)]
 
 
 # Compute satellite locations at each datetime
-sat_lat, sat_lon = [], []
+sat_lat, sat_lon,sat_latp, sat_lonp = [], [],[ ], []
 for date in dt:
     home.date = date
     iss.compute(home)
     sat_lon.append(np.rad2deg(iss.sublong))
     sat_lat.append(np.rad2deg(iss.sublat))
 
+for date in dt_past:
+    home.date = date
+    iss.compute(home)
+    sat_lonp.append(np.rad2deg(iss.sublong))
+    sat_latp.append(np.rad2deg(iss.sublat))
 
 for i in range(len(sat_lon)):
     if sat_lon[i]<0:
         sat_lon[i]=360+sat_lon[i]
+for i in range(len(sat_lonp)):
+        if sat_lonp[i]<0:
+            sat_lonp[i]=360+sat_lonp[i]
 
 
 
@@ -56,13 +66,18 @@ date = datetime.datetime.utcnow()
 x,y=map(sat_lon,sat_lat)
 x = np.atleast_1d(x)
 y = np.atleast_1d(y)
+
+xp,yp=map(sat_lonp,sat_latp)
+xp = np.atleast_1d(xp)
+yp = np.atleast_1d(yp)
+
 CS=map.nightshade(date)
 
-#plt.scatter(x,y,color='r')
+plt.scatter(xp,yp,color='y',s=5,label="Past Hour")
 plt.ion()
 
 for i in range(len(sat_lon)):
-    plt.scatter(x[i],y[i],color='r')
+    plt.scatter(x[i],y[i],color='r',label="realtime")
     plt.pause(1)
 
 while True:
