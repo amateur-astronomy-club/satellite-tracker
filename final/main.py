@@ -8,7 +8,7 @@ def run():
     else:
          index = str(sys.argv[1])
     scrapper = Scrape(index)
-    #scrapper.run()
+    scrapper.run()
     plotter = Plot(index)
     plotter.run()
     raw_input()

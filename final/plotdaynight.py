@@ -98,14 +98,14 @@ class Plot:
 
         plt.scatter(xp, yp, color='y', s=5, label="Past Hour")
         plt.ion()
-        print x[0],y[0]
+        
         for i in range(len(sat_lon)):
             plt.scatter(x[i], y[i], color='r', label="realtime")
             plt.pause(1)
 
         while self.running:
             plt.pause(1)
-            print "here pause\n"
+
 
         # plt.title('Day/Night Map for %s (UTC)' % date.strftime("%d %b %Y %H:%M:%S"))
         # plt.show()
