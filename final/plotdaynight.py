@@ -17,7 +17,7 @@ class Plot:
     def checkTLE(self,index):
         TLEfileExists = Path("./TLE/" + index + '.txt')
         if (TLEfileExists.is_file() == False):
-            getnewtle(index)
+            self.getnewtle(index)
 
     def getnewtle(self,index):
         # API credentials
@@ -82,6 +82,7 @@ class Plot:
         # fill continents 'coral' (with zorder=0), color wet areas 'aqua'
         map.drawmapboundary(fill_color='aqua')
 
+
         # map.fillcontinents(color='coral',lake_color='aqua')
         # shade the night areas, with alpha transparency so the
         # map shows through. Use current time in UTC.
@@ -98,9 +99,14 @@ class Plot:
 
         plt.scatter(xp, yp, color='y', s=5, label="Past Hour")
         plt.ion()
-        
-        for i in range(len(sat_lon)):
-            plt.scatter(x[i], y[i], color='r', label="realtime")
+        plt.scatter(x[0], y[0], color='#FF3F35', label="Real time")
+
+        leg = plt.legend(fancybox=True,shadow=True,loc=4)
+        leg.get_frame().set_alpha(0.1)
+
+        for i in range(1,len(sat_lon)):
+
+            plt.scatter(x[i], y[i], color='#FF3F35', label="Real time")
             plt.pause(1)
 
         while self.running:

@@ -9,27 +9,27 @@ from pathlib2 import Path
 
 degrees_per_radian = 180.0 / math.pi
 
-def checkTLE(index):
-    TLEfileExists = Path("./TLE/" + index + '.txt')
-    if (TLEfileExists.is_file() == False):
-        getnewtle(index)
-
-def getnewtle(index):
-    # API credentials
-    newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
-    tledata = newsat.query(
-        "class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false" % index)
-
-    writefile = open("./TLE/" + index + '.txt', "w")
-    writefile.write(tledata)
-    writefile.close()
 
 class Scrape():
     def __init__(self,this_sat):
         self.running = False
         self.id = this_sat
-        checkTLE(this_sat)
+        self.checkTLE(this_sat)
 
+    def checkTLE(self,index):
+        TLEfileExists = Path("./TLE/" + index + '.txt')
+        if (TLEfileExists.is_file() == False):
+            self.getnewtle(index)
+
+    def getnewtle(self,index):
+        # API credentials
+        newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
+        tledata = newsat.query(
+            "class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false" % index)
+
+        writefile = open("./TLE/" + index + '.txt', "w")
+        writefile.write(tledata)
+        writefile.close()
 
     # change all . to respective folder
     def setDefaultHome(self):
@@ -60,9 +60,9 @@ class Scrape():
         tlesplit = tlefile.split('\n')
 
         assert len(tlesplit) >= 3
-        print './TLE/' + index + '.txt', 'r'
+        
         sat = ephem.readtle(tlesplit[0], tlesplit[1], tlesplit[2])
-        print sat
+        print "Tracking", tlesplit[0][2:]
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
