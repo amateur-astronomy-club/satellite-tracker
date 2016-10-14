@@ -9,10 +9,27 @@ from pathlib2 import Path
 
 degrees_per_radian = 180.0 / math.pi
 
+def checkTLE(index):
+    TLEfileExists = Path("./TLE/" + index + '.txt')
+    if (TLEfileExists.is_file() == False):
+        getnewtle(index)
 
-class Scrape:
-    def __init__(self):
+def getnewtle(index):
+    # API credentials
+    newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
+    tledata = newsat.query(
+        "class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false" % index)
+
+    writefile = open("./TLE/" + index + '.txt', "w")
+    writefile.write(tledata)
+    writefile.close()
+
+class Scrape():
+    def __init__(self,this_sat):
         self.running = False
+        self.id = this_sat
+        checkTLE(this_sat)
+
 
     # change all . to respective folder
     def setDefaultHome(self):
@@ -34,28 +51,18 @@ class Scrape:
         # TODO: Get current location
         return home
 
-    def getnewtle(self, index):
-        # API credentials
-        newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
-        tledata = newsat.query(
-            "class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false" % index)
 
-        writefile = open("./TLE/" + index + '.txt', "w")
-        writefile.write(tledata)
-        writefile.close()
 
     def printCoordinates(self, index, home):
-        TLEfileExists = Path("./TLE/" + index + '.txt')
-        if (TLEfileExists.is_file() == False):
-            self.getnewtle(index)
+
 
         tlefile = open('./TLE/' + index + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
 
         assert len(tlesplit) >= 3
-
-        sat = ephem.readtle(index, tlesplit[1], tlesplit[2])
-
+        print './TLE/' + index + '.txt', 'r'
+        sat = ephem.readtle(tlesplit[0], tlesplit[1], tlesplit[2])
+        print sat
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
@@ -70,9 +77,7 @@ class Scrape:
 
     def sendCoordinates(self, index, home):
         # Get TLE and convert to coordinates, send to arduino
-        TLEfileExists = Path("./TLE/" + index + '.txt')
-        if (TLEfileExists.is_file() == False):
-            self.getnewtle(index)
+
 
         tlefile = open('./TLE/' + index + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
@@ -92,10 +97,10 @@ class Scrape:
     def run(self):
         self.running = True
         home = self.setNITKHome()
-        index = '26702'
+
 
         def to_thread():
-            self.printCoordinates(index, home)
+            self.printCoordinates(self.id, home)
 
         t_s = threading.Thread(target=to_thread)
         t_s.setDaemon(True)
@@ -106,7 +111,7 @@ class Scrape:
 
 
 if __name__ == '__main__':
-    scrapper = Scrape()
+    scrapper = Scrape('26702')
     scrapper.run()
     raw_input()
     scrapper.stop()

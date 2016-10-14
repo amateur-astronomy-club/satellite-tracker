@@ -84,4 +84,4 @@ while True:
     plt.pause(1)
 
 plt.title('Day/Night Map for %s (UTC)' % date.strftime("%d %b %Y %H:%M:%S"))
-plt.show()
+#plt.show()

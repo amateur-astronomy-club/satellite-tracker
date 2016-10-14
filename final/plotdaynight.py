@@ -1,16 +1,18 @@
 import datetime
 import threading
 from datetime import timedelta
-
+import scraper
 import ephem
 import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 
 
-class Plot:
-    def __init__(self):
+class Plot():
+    def __init__(self,this_sat):
         self.running = False
+        self.id = this_sat
+        scraper.checkTLE(this_sat)
 
     def to_run(self):
         # Setup lat long of telescope
@@ -21,13 +23,14 @@ class Plot:
         home.elevation = 0  # meters
         home.date = datetime.datetime.now()
 
-        # Always get the latest ISS TLE data from:
-        # http://spaceflight.nasa.gov/realdata/sightings/SSapplications/Post/JavaSSOP/orbit/ISS/SVPOST.html
-        iss = ephem.readtle('ISS',
-                            '1 25544U 98067A   16274.50033672  .00016717  00000-0  10270-3 0  9003',
-                            '2 25544  51.6383 252.7108 0006713  21.8902 338.2536 15.54019889 21364'
-                            )
+        print './TLE/' + self.id + '.txt', 'r'
+        tlefile = open('./TLE/' + self.id + '.txt', 'r').read()
+        tlesplit = tlefile.split('\n')
 
+        assert len(tlesplit) >= 3
+        print './TLE/' + self.id + '.txt', 'r'
+        satellite = ephem.readtle(self.id, tlesplit[1], tlesplit[2])
+        print satellite
         # Make some datetimes
         current_time = datetime.datetime.now()
         past_time = current_time + timedelta(hours=-1)
@@ -38,15 +41,15 @@ class Plot:
         sat_lat, sat_lon, sat_latp, sat_lonp = [], [], [], []
         for date in dt:
             home.date = date
-            iss.compute(home)
-            sat_lon.append(np.rad2deg(iss.sublong))
-            sat_lat.append(np.rad2deg(iss.sublat))
+            satellite.compute(home)
+            sat_lon.append(np.rad2deg(satellite.sublong))
+            sat_lat.append(np.rad2deg(satellite.sublat))
 
         for date in dt_past:
             home.date = date
-            iss.compute(home)
-            sat_lonp.append(np.rad2deg(iss.sublong))
-            sat_latp.append(np.rad2deg(iss.sublat))
+            satellite.compute(home)
+            sat_lonp.append(np.rad2deg(satellite.sublong))
+            sat_latp.append(np.rad2deg(satellite.sublat))
 
         for i in range(len(sat_lon)):
             if sat_lon[i] < 0:
@@ -107,7 +110,7 @@ class Plot:
 
 
 if __name__ == "__main__":
-    plotter = Plot()
+    plotter = Plot('26702')
     plotter.run()
     raw_input()
     plotter.stop()

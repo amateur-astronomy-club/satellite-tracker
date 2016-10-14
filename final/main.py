@@ -1,11 +1,15 @@
 from plotdaynight import Plot
 from scraper import Scrape
-
+import sys
 
 def run():
-    scrapper = Scrape()
+    if len(sys.argv)==1:
+        index='25544'
+    else:
+         index = str(sys.argv[1])
+    scrapper = Scrape(index)
     scrapper.run()
-    plotter = Plot()
+    plotter = Plot(index)
     plotter.run()
     raw_input()
     scrapper.stop()
