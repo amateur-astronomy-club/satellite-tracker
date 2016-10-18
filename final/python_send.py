@@ -51,6 +51,7 @@ class Sender:
         alt *= -1
         alt += 90
         alt %= 360
+        az %= 360
 
         az_out = 0
         if az - self.last_az >= 1.8:
@@ -63,7 +64,7 @@ class Sender:
 
         az *= -1
         az_out += 10
-        return alt, az
+        return alt, az_out
 
     def send(self, alt, az):
         value1, value2 = self.process_data(alt, az)
