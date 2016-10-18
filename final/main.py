@@ -1,12 +1,14 @@
-from plotdaynight import Plot
-from scraper import Scrape
 import sys
 
+from plotdaynight import Plot
+from scraper import Scrape
+
+
 def run():
-    if len(sys.argv)==1:
-        index='25544'
+    if len(sys.argv) == 1:
+        index = '25544'
     else:
-         index = str(sys.argv[1])
+        index = str(sys.argv[1])
     scrapper = Scrape(index)
     scrapper.run()
     plotter = Plot(index)
@@ -14,5 +16,6 @@ def run():
     raw_input()
     scrapper.stop()
     plotter.stop()
+
 
 run()

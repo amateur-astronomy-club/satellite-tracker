@@ -7,21 +7,24 @@ import ephem
 from auromat.coordinates.spacetrack import Spacetrack
 from pathlib2 import Path
 
+from python_send import Sender
+
 degrees_per_radian = 180.0 / math.pi
 
 
 class Scrape():
-    def __init__(self,this_sat):
+    def __init__(self, this_sat):
         self.running = False
         self.id = this_sat
         self.checkTLE(this_sat)
+        self.sender = Sender()
 
-    def checkTLE(self,index):
+    def checkTLE(self, index):
         TLEfileExists = Path("./TLE/" + index + '.txt')
         if (TLEfileExists.is_file() == False):
             self.getnewtle(index)
 
-    def getnewtle(self,index):
+    def getnewtle(self, index):
         # API credentials
         newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
         tledata = newsat.query(
@@ -51,16 +54,13 @@ class Scrape():
         # TODO: Get current location
         return home
 
-
-
     def printCoordinates(self, index, home):
-
 
         tlefile = open('./TLE/' + index + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
 
         assert len(tlesplit) >= 3
-        
+
         sat = ephem.readtle(tlesplit[0], tlesplit[1], tlesplit[2])
         print "Tracking", tlesplit[0][2:]
         while self.running:
@@ -89,6 +89,7 @@ class Scrape():
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
+            self.sender.send(sat.alt * degrees_per_radian, sat.az * degrees_per_radian)
             # TODO: Convert this to sending it to arduino, maybe add arguments
             # print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
             #                                         sat.az * degrees_per_radian)
@@ -98,9 +99,9 @@ class Scrape():
         self.running = True
         home = self.setNITKHome()
 
-
         def to_thread():
             self.printCoordinates(self.id, home)
+            self.sendCoordinates(self.id, home)
 
         t_s = threading.Thread(target=to_thread)
         t_s.setDaemon(True)
@@ -108,6 +109,7 @@ class Scrape():
 
     def stop(self):
         self.running = False
+        self.sender.end()
 
 
 if __name__ == '__main__':
