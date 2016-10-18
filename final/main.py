@@ -11,4 +11,5 @@ def run():
     scrapper.stop()
     plotter.stop()
 
+
 run()
