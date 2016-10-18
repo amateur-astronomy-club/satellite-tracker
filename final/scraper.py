@@ -89,7 +89,11 @@ class Scrape():
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
+            print '\rsat: altitude %4.1f deg, azimuth %5.1f deg' % (sat.alt * degrees_per_radian,
+                                                                    sat.az * degrees_per_radian)
+
             self.sender.send(sat.alt * degrees_per_radian, sat.az * degrees_per_radian)
+
             # TODO: Convert this to sending it to arduino, maybe add arguments
             # print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
             #                                         sat.az * degrees_per_radian)
@@ -100,7 +104,7 @@ class Scrape():
         home = self.setNITKHome()
 
         def to_thread():
-            self.printCoordinates(self.id, home)
+            # self.printCoordinates(self.id, home)
             self.sendCoordinates(self.id, home)
 
         t_s = threading.Thread(target=to_thread)

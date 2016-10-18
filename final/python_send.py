@@ -16,6 +16,8 @@ class Sender:
         for p in ports:
             if "2341" in p[2].lower():
                 port_loc = p[0]
+
+                print "Arduino Found!"
                 break
 
         if port_loc is None:
@@ -23,11 +25,13 @@ class Sender:
 
         self.arduino = serial.Serial(port_loc)
 
-    @staticmethod
-    def convert_to_999(angle):
-        if angle < 0 or angle > 180: raise ValueError
+        print "Connected to Arduino"
 
-        value_999 = int(angle * 999 / 180)
+        self.last_az = 0
+
+    def convert_to_999(self, angle):
+
+        value_999 = int(angle)
         out = str(value_999)
 
         while len(out) < 3:
@@ -35,8 +39,39 @@ class Sender:
 
         return out
 
-    def send(self, angle1, angle2):
-        self.arduino.write(Sender.convert_to_999(angle1) + Sender.convert_to_999(angle2) + '!')
+    def process_data(self, alt, az):
+        angle_per_step = 1.8
+
+        """
+        map to servo coordinates
+        :param alt:
+        :param az:
+        :return:
+        """
+        alt *= -1
+        alt += 90
+        alt %= 360
+
+        az_out = 0
+        if az - self.last_az >= 1.8:
+            az_out = int((az - self.last_az)/angle_per_step)
+            self.last_az = az
+
+        if alt >= 180:
+            alt -= 180
+            az_out = 180 / angle_per_step
+
+        az *= -1
+        az_out += 10
+        return alt, az
+
+    def send(self, alt, az):
+        value1, value2 = self.process_data(alt, az)
+        string_send = self.convert_to_999(value1) + self.convert_to_999(value2) + '!'
+        print "String Send: ", string_send
+        self.arduino.write(string_send)
+        # print "Value received from arduino: ", self.arduino.readline()
+        print "Send values to Arduino"
 
     def end(self):
         self.arduino.close()

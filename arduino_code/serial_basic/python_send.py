@@ -27,7 +27,7 @@ class Sender:
     def convert_to_999(angle):
         if angle < 0 or angle > 180: raise ValueError
 
-        value_999 = int(angle * 999 / 180)
+        value_999 = int(angle)
         out = str(value_999)
 
         while len(out) < 3:

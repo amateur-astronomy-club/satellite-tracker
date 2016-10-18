@@ -6,7 +6,7 @@ from scraper import Scrape
 
 def run():
     if len(sys.argv) == 1:
-        index = '25544'
+        index = '35931'
     else:
         index = str(sys.argv[1])
     scrapper = Scrape(index)

@@ -8,18 +8,19 @@ import numpy as np
 from mpl_toolkits.basemap import Basemap
 from pathlib2 import Path
 
+
 class Plot:
-    def __init__(self,this_sat):
+    def __init__(self, this_sat):
         self.running = False
         self.id = this_sat
         self.checkTLE(this_sat)
 
-    def checkTLE(self,index):
+    def checkTLE(self, index):
         TLEfileExists = Path("./TLE/" + index + '.txt')
         if (TLEfileExists.is_file() == False):
             self.getnewtle(index)
 
-    def getnewtle(self,index):
+    def getnewtle(self, index):
         # API credentials
         newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
         tledata = newsat.query(
@@ -37,7 +38,6 @@ class Plot:
         home.lat = np.deg2rad(13.3408810)  # +N
         home.elevation = 0  # meters
         home.date = datetime.datetime.now()
-
 
         tlefile = open('./TLE/' + self.id + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
@@ -82,7 +82,6 @@ class Plot:
         # fill continents 'coral' (with zorder=0), color wet areas 'aqua'
         map.drawmapboundary(fill_color='aqua')
 
-
         # map.fillcontinents(color='coral',lake_color='aqua')
         # shade the night areas, with alpha transparency so the
         # map shows through. Use current time in UTC.
@@ -101,17 +100,15 @@ class Plot:
         plt.ion()
         plt.scatter(x[0], y[0], color='#FF3F35', label="Real time")
 
-        leg = plt.legend(fancybox=True,shadow=True,loc=4)
+        leg = plt.legend(fancybox=True, shadow=True, loc=4)
         leg.get_frame().set_alpha(0.1)
 
-        for i in range(1,len(sat_lon)):
-
+        for i in range(1, len(sat_lon)):
             plt.scatter(x[i], y[i], color='#FF3F35', label="Real time")
             plt.pause(1)
 
         while self.running:
             plt.pause(1)
-
 
         # plt.title('Day/Night Map for %s (UTC)' % date.strftime("%d %b %Y %H:%M:%S"))
         # plt.show()

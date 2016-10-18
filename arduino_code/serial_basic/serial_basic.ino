@@ -1,13 +1,14 @@
-int servos[2] = {0};
 #include <Servo.h> 
+#include <Stepper.h>
+
+int servos[2] = {0};
 
 Servo ser_out1;
-Servo ser_out2;
+Stepper ser_out2(200, 3, 4, 5, 6);
 
 
 void setup() {
   ser_out1.attach(9);
-  ser_out2.attach(10);
   Serial.begin(9600);
 }
 
@@ -36,10 +37,10 @@ bool read_input() {
 
 void loop () {
   if (read_input()) {
-       Serial.println(servos[0]);
-       Serial.println(servos[1]);
-       ser_out1.writeMicroseconds(servos[0] + 1000);
-       ser_out2.writeMicroseconds(servos[1] + 1000);
+       //Serial.println(servos[0]);
+       //Serial.println(servos[1]);
+       ser_out1.write(servos[0]);
+       ser_out2.step(servos[1] - 10);
     }
     
 }
