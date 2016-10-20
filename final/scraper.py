@@ -89,8 +89,8 @@ class Scrape():
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
-            print '\rsat: altitude %4.1f deg, azimuth %5.1f deg' % (sat.alt * degrees_per_radian,
-                                                                    sat.az * degrees_per_radian)
+            print '\r%s:\n altitude %4.1f deg, azimuth %5.1f deg' % (tlesplit[0][2:],sat.alt * degrees_per_radian,
+                                                                   sat.az * degrees_per_radian)
 
             self.sender.send(sat.alt * degrees_per_radian, sat.az * degrees_per_radian)
 

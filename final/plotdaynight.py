@@ -95,6 +95,9 @@ class Plot:
         yp = np.atleast_1d(yp)
 
         CS = map.nightshade(date)
+        
+        mng = plt.get_current_fig_manager()
+        mng.window.showMaximized()
 
         plt.scatter(xp, yp, color='y', s=5, label="Past Hour")
         plt.ion()

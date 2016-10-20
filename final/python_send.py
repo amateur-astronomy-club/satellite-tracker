@@ -72,7 +72,7 @@ class Sender:
         print "String Send: ", string_send
         self.arduino.write(string_send)
         # print "Value received from arduino: ", self.arduino.readline()
-        print "Send values to Arduino"
+        print "Sent values to Arduino"
 
     def end(self):
         self.arduino.close()
