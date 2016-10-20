@@ -64,12 +64,13 @@ class Scrape():
         sat = ephem.readtle(tlesplit[0], tlesplit[1], tlesplit[2])
         print "Tracking", tlesplit[0][2:]
         while self.running:
+
             home.date = datetime.utcnow()
             sat.compute(home)
             print '\rsat: altitude %4.1f deg, azimuth %5.1f deg' % (sat.alt * degrees_per_radian,
                                                                     sat.az * degrees_per_radian)
 
-            time.sleep(1)
+            time.sleep(2)
 
     def convertToIndex(self, SateliteName):
         # TODO: Given satellite name, convert to index (use dictionary)
@@ -86,18 +87,22 @@ class Scrape():
 
         sat = ephem.readtle(index, tlesplit[1], tlesplit[2])
 
+        i = 0
         while self.running:
             home.date = datetime.utcnow()
             sat.compute(home)
             print '\r%s:\n altitude %4.1f deg, azimuth %5.1f deg' % (tlesplit[0][2:],sat.alt * degrees_per_radian,
                                                                    sat.az * degrees_per_radian)
 
-            self.sender.send(sat.alt * degrees_per_radian, sat.az * degrees_per_radian)
+            i += 1
+            if i >= 3:
+                i = 3
+                self.sender.send(sat.alt * degrees_per_radian, sat.az * degrees_per_radian)
 
             # TODO: Convert this to sending it to arduino, maybe add arguments
             # print '\rsat: altitude %4.1f deg, azimuth %5.1f deg'% (sat.alt * degrees_per_radian,
             #                                         sat.az * degrees_per_radian)
-            time.sleep(1)
+            time.sleep(2)
 
     def run(self):
         self.running = True

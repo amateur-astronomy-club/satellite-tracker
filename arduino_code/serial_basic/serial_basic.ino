@@ -3,11 +3,14 @@
 
 int servos[2] = {0};
 
+
+const int stepsPerRevolution = 200;
 Servo ser_out1;
-Stepper ser_out2(200, 3, 4, 5, 6);
+Stepper ser_out2(stepsPerRevolution, 3, 4, 5, 6);
 
 
 void setup() {
+  ser_out2.setSpeed(5);
   ser_out1.attach(9);
   Serial.begin(9600);
 }
@@ -40,7 +43,11 @@ void loop () {
        //Serial.println(servos[0]);
        //Serial.println(servos[1]);
        ser_out1.write(servos[0]);
-       ser_out2.step(servos[1] - 10);
+       
+       if (servos[1] != 400) {
+        ser_out2.step(servos[1] - 400);
+        delay(1000);
+       }
     }
     
 }
