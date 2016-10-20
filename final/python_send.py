@@ -53,22 +53,27 @@ class Sender:
         alt += 90
         alt %= 360
 
-        az *= -1
         az_out = 0
-        if abs(az - self.last_az) >= 1.8:
-            az_out = int((az - self.last_az) / angle_per_step)
-            self.last_az += az_out * angle_per_step
 
         if alt >= 180 and not self.greater_than_180:
             self.greater_than_180 = True
             az_out = 180 / angle_per_step
 
-        if alt < 180 and self.greater_than_180:
+        elif alt < 180 and self.greater_than_180:
             self.greater_than_180 = False
             az_out = -180 / angle_per_step
 
+        elif abs(az - self.last_az) >= 1.8:
+            az_out = int((az - self.last_az) / angle_per_step)
+            self.last_az += az_out * angle_per_step
+
+        if self.greater_than_180:
+            alt_out = 360 - alt
+        else:
+            alt_out = alt
+
         az_out += 400
-        return (alt % 180), az_out
+        return alt_out, az_out
 
     def send(self, alt, az):
         value1, value2 = self.process_data(alt, az)
