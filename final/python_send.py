@@ -80,13 +80,9 @@ class Sender:
         string_send = self.convert_to_999(value1) + self.convert_to_999(value2) + '!'
         print "String Send: ", string_send
         self.arduino.write(string_send)
-<<<<<<< HEAD
-        # print "Value received from arduino: ", self.arduino.readline()
-        print "Sent values to Arduino"
-=======
         # print "Value received from arduino: ", self.arduino.read(5)
         print "Send values to Arduino"
->>>>>>> f8b964d71a603957c23fd0d6b533155a63cea732
 
     def end(self):
         self.arduino.close()
+
