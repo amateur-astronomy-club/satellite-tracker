@@ -20,11 +20,13 @@ class Scrape():
         self.sender = Sender()
 
     def checkTLE(self, index):
+        #Check if provided TLE is already present in TLE folder, else download from Spacetrack
         TLEfileExists = Path("./TLE/" + index + '.txt')
         if (TLEfileExists.is_file() == False):
             self.getnewtle(index)
 
     def getnewtle(self, index):
+        #Get new TLE from SpaceTrack API and sve in TLE folder
         # API credentials
         newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
         tledata = newsat.query(
@@ -34,7 +36,7 @@ class Scrape():
         writefile.write(tledata)
         writefile.close()
 
-    # change all . to respective folder
+    
     def setDefaultHome(self):
         home = ephem.Observer()
         home.lon = '0.0000'  # +E
@@ -43,6 +45,7 @@ class Scrape():
         return home
 
     def setNITKHome(self):
+        #provides lon lat details of NITK Surathkal. MOdify according to your location
         home = ephem.Observer()
         home.lon = '74.7937'  # +E
         home.lat = '13.0119'  # +N
@@ -55,6 +58,7 @@ class Scrape():
         return home
 
     def printCoordinates(self, index, home):
+        #To test if correct values are being generated
 
         tlefile = open('./TLE/' + index + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
