@@ -7,9 +7,10 @@ _**THIS IS A WORK IN PROGRESS** We are actively working on this Roadmap._
 
 ## Proposed updates for 2017
 
-* **Step 1.** `DONE` Remake 2016 Version  
-* **Step 2.** **[IN PROGRESS]** Create base with DC motor for tracking right ascension ( one axis ) 
-* **Step 3.** **[IN PROGRESS]** Get data the from sensor on the Arduino Nano
+* **Step 1.** `LEAP FROGGED` Remake 2016 Version  
+* **Step 2.** **[IN PROGRESS]** Create base with DC motor for tracking declination ( one axis ) 
+* **Step 3.** `DONE` Get data the from sensor on the Arduino Nano.
+Notes: Magnetometer Y axis isn't working. Using X and Z axis for orientation.
 * **Step 4.** **[IN PROGRESS]** Connect Arduino Nano to python server through Bluetooh
-* **Step 5.** `NEXT STEP` Make Feedback loop controller for Right Ascension
-* **Step 6.** DO same for declination axis
+* **Step 5.** `NEXT STEP` Make Feedback loop controller for Declination
+* **Step 6.** DO same for right ascension axis
