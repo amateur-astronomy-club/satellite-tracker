@@ -1,7 +1,7 @@
 Satellite Tracker
 ======
 
-Github Repo of the satellite tracker built by AAC NITK as part of Astro Committee, Engineer '16 - 17.
+Github Repo of the satellite tracker built by AAC NITK as part of Astro Committee for Engineer 2016 and Engineer 2017.
 
 _**THIS IS A WORK IN PROGRESS** We are actively working on this Roadmap._
 
