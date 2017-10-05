@@ -14,3 +14,12 @@ Notes: Magnetometer Y axis isn't working. Using X and Z axis for orientation.
 * **Step 4.** `DONE` Connect Arduino Nano to python server through Bluetooh
 * **Step 5.** `NEXT STEP` Make Feedback loop controller for azimuth
 * **Step 6.** DO same for elevation (second axis)
+
+### Stellarium Integration
+* **Step 1.** **[IN PROGRESS]** Check out interfaces for Stellarium Telescope
+  Control Protocol.
+* **Step 2.** Check if data canbe directly sent to the backend upon selection of
+  object
+
+### Online APIs
+* Check for Web APIs that will provide satellite data directly.
