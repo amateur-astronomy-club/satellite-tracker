@@ -11,7 +11,7 @@ _**THIS IS A WORK IN PROGRESS** We are actively working on this Roadmap._
 
 * **Step 1.** `LEAP FROGGED` Remake 2016 Version  
 * **Step 2.** `DONE` Create base with DC motor for tracking azimuth ( one axis )
-* **Step 2.1** **[IN PROGRESS]** Control DC motor from python server through Arduino and Motor Driver (L293D)
+* **Step 2.i.** **[IN PROGRESS]** Control DC motor from python server through Arduino and Motor Driver (L293D)
 * **Step 3.** `DONE` Get data the from sensor on the Arduino Nano.
 Notes: Magnetometer Y axis isn't working. Using X and Z axis for orientation.
 * **Step 4.** `DONE` Connect Arduino Nano to python server through Bluetooh. Notes: Used Serial COM.
