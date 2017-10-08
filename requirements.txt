@@ -1,7 +1,7 @@
 auromat==1.0.8
 matplotlib==1.5.1
-basemap==1.7.0
 numpy==1.11.0
+basemap==1.0.7
 pathlib2==2.1.0
 matplotlib==1.5.1
 pyephem==3.7.6.0
