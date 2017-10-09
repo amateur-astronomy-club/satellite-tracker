@@ -1,27 +1,30 @@
-from finder import SpaceObject
-from Hardware import Hardware
 from time import sleep
+
+from Hardware import Hardware
+from finder import SpaceObject
+
+import ephem
 
 hardware = Hardware()
 hardware.connect()
 
-obj = SpaceObject('27062')
+obj = SpaceObject(ephem.Jupiter())
 alt, az = obj.getCoordinates()
 hardware.set_target(az, alt)
 
 counter = 0
 while True:
-
-	try:
-		hardware.loop()
+    try:
+        print hardware.loop()
         sleep(0.01)
         counter += 1
         if counter == 100:
-        	alt, az = obj.getCoordinates()
-			hardware.set_target(az, alt)
-        	counter = 0
+            alt, az = obj.getCoordinates()
+            print alt, az
+            hardware.set_target(az, alt)
+            counter = 0
 
     except KeyboardInterrupt:
-    	hardware.stop()
-    	break
-
+        hardware.stop()
+        break
+hardware.stop()

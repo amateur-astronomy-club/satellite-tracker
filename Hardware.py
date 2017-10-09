@@ -76,5 +76,6 @@ class Hardware:
         if error is None: return
         self.pid.update(error)
         self.set_motor(self.pid.output)
+        return error
 
 
