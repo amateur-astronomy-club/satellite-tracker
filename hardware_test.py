@@ -1,4 +1,4 @@
-from Hardware import Hardware
+from hardware import Hardware
 from time import sleep
 
 hardware = Hardware()

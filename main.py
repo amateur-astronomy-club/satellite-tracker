@@ -1,6 +1,6 @@
 from time import sleep
 
-from Hardware import Hardware
+from hardware import Hardware
 from finder import SpaceObject
 
 import ephem

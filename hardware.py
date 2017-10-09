@@ -10,7 +10,7 @@ class Hardware:
         self.top_arduino = None
         self.base_arduino = None
 
-        self.base_target = None
+        self.base_target = None  # Current target for PID
 
     def connect(self, port1="COM4", port2="COM6"):
         print "Initializing Bluetooth Connection..."
@@ -20,8 +20,9 @@ class Hardware:
         self.top_arduino.flushInput()  # clear buffer because Arduino has been sending values
 
     def set_motor(self, val):
+        """write to base arduino"""
         val = int(val)
-        if val > 255: val = 255
+        if val > 255: val = 255  # value range of arduino analogWrite()
         if val < -255: val = -255
         self.base_arduino.write(str(val) + '\n')
 
@@ -32,6 +33,7 @@ class Hardware:
             return None
 
     def set_servo(self, angle):
+        """Convert angle for servo to the required PWM signal range"""
 
         if angle > 90: angle = 90
         if angle < -90: angle = -90
@@ -47,6 +49,7 @@ class Hardware:
         self.top_arduino.write(val)
 
     def convert_mag(self, mag):
+        """Covert angle measured by magnetometer to azimuth convention (Clockwise from North)"""
         if mag != 0: mag = 360 - mag  # counter clockwise to clockwise
         mag -= 26  # fixed error of magnetometer
         if mag < 0: mag = 360 + mag  # warp around
@@ -58,12 +61,16 @@ class Hardware:
         self.pid.clear()
 
     def find_error(self):
+        """
+        Find the error between target and current base position
+        :return:
+        """
         mag = self.read_mag()
         if mag is None: return None
         mag = self.convert_mag(mag)
         error = self.base_target - mag
         if error < 0: error = 360 + error  # convert to 0 - 360 from -x to -x + 360
-        if error > 180: error = -(360 - error) # convert to -180 to 180
+        if error > 180: error = -(360 - error)  # convert to -180 to 180
         return error
 
     def set_target(self, azimuth, elevation):
@@ -71,11 +78,12 @@ class Hardware:
         self.base_target = azimuth
 
     def loop(self):
+        """
+        Loop so that the PID controller can run and adjust base to the target
+        """
         if self.base_target is None: return None
         error = self.find_error()
         if error is None: return
         self.pid.update(error)
         self.set_motor(self.pid.output)
         return error
-
-
