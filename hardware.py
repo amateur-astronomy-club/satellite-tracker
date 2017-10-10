@@ -17,7 +17,8 @@ class Hardware:
         self.top_arduino = serial.Serial(port1, 9600, timeout=1)  # open serial port that Arduino is using
         print "Connecting to Arduino..."
         self.base_arduino = serial.Serial(port2, 9600, timeout=1)  # open serial port that Arduino is using
-        self.top_arduino.flushInput()  # clear buffer because Arduino has been sending values
+        self.top_arduino.flushInput()
+        self.top_arduino.read(10000)# clear buffer because Arduino has been sending values
 
     def set_motor(self, val):
         """write to base arduino"""
@@ -51,7 +52,7 @@ class Hardware:
     def convert_mag(self, mag):
         """Covert angle measured by magnetometer to azimuth convention (Clockwise from North)"""
         if mag != 0: mag = 360 - mag  # counter clockwise to clockwise
-        mag = mag - 26 + 40 # fixed error of magnetometer
+        mag = mag - 26 + 30 + 20# fixed error of magnetometer
         if mag < 0: mag = 360 + mag  # warp around
         return mag
 
