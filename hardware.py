@@ -51,7 +51,7 @@ class Hardware:
     def convert_mag(self, mag):
         """Covert angle measured by magnetometer to azimuth convention (Clockwise from North)"""
         if mag != 0: mag = 360 - mag  # counter clockwise to clockwise
-        mag -= 26  # fixed error of magnetometer
+        mag = mag - 26 + 40 # fixed error of magnetometer
         if mag < 0: mag = 360 + mag  # warp around
         return mag
 

@@ -8,12 +8,11 @@ class PID:
         self.Ki = I
         self.Kd = D
 
-        
         self.clear()
 
     def clear(self):
         """Clears PID computations and coefficients"""
-        
+
         self.PTerm = 0.0
         self.ITerm = 0.0
         self.DTerm = 0.0
@@ -28,7 +27,7 @@ class PID:
     def update(self, error):
         """Calculates PID value for given reference feedback
         """
-        
+
         delta_error = error - self.last_error
 
         self.PTerm = self.Kp * error
@@ -39,7 +38,9 @@ class PID:
         elif (self.ITerm > self.windup_guard):
             self.ITerm = self.windup_guard
 
-        self.DTerm = delta_error 
+        if abs(error) < 5: self.ITerm = 0
+
+        self.DTerm = delta_error
 
         # Remember last error for next calculation
         self.last_error = error
@@ -69,5 +70,3 @@ class PID:
         The specific problem is the excess overshooting.
         """
         self.windup_guard = windup
-
-    

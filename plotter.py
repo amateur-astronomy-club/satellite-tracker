@@ -1,15 +1,16 @@
 import datetime
 import threading
+from datetime import timedelta
+
 import ephem
 import matplotlib.pyplot as plt
 import numpy as np
-from mpl_toolkits.basemap import Basemap
 from auromat.coordinates.spacetrack import Spacetrack
+from mpl_toolkits.basemap import Basemap
 from pathlib2 import Path
-from datetime import timedelta
+
 
 class Plot:
-
     """Plot class that iisused to nteractively plot real time position of satellite
   
     """
@@ -40,7 +41,7 @@ class Plot:
 
         # API credentials
         newsat = Spacetrack("asavari.limaye@gmail.com", "2016AACNITK2017")
-        
+
         # Get TLE for specified index(NORAD ID)
         tledata = newsat.query(
             "class/tle_latest/NORAD_CAT_ID/%s/orderby/ORDINAL asc/limit/1/format/3le/metadata/false" % index)
@@ -56,7 +57,6 @@ class Plot:
 
         """
 
-
         # Setup lat long of telescope
         home = ephem.Observer()
 
@@ -65,15 +65,15 @@ class Plot:
         home.lat = np.deg2rad(13.3408810)  # +N
         home.elevation = 0  # meters
         home.date = datetime.datetime.now()
-        
+
         # Read TLE file
         tlefile = open('./TLE/' + self.id + '.txt', 'r').read()
         tlesplit = tlefile.split('\n')
-        
+
         assert len(tlesplit) >= 3
 
         satellite = ephem.readtle(tlesplit[0], tlesplit[1], tlesplit[2])
-        
+
         # Make some datetimes
         # We will plot the path for thepast hour then start real time tracking
         # We pre compute values for 24 hours
@@ -95,7 +95,7 @@ class Plot:
             satellite.compute(home)
             sat_lonp.append(np.rad2deg(satellite.sublong))
             sat_latp.append(np.rad2deg(satellite.sublat))
-        
+
         # Calibrate everything to have positive values
         for i in range(len(sat_lon)):
             if sat_lon[i] < 0:
@@ -103,7 +103,7 @@ class Plot:
         for i in range(len(sat_lonp)):
             if sat_lonp[i] < 0:
                 sat_lonp[i] = 360 + sat_lonp[i]
-        
+
         # miller projection using Basemap
         mymap = Basemap(projection='mill', lon_0=180)
         print "Here 3"
@@ -111,7 +111,7 @@ class Plot:
         mymap.drawcoastlines()
         mymap.drawparallels(np.arange(-90, 90, 30), labels=[1, 0, 0, 0])
         mymap.drawmeridians(np.arange(mymap.lonmin, mymap.lonmax + 30, 60), labels=[0, 0, 0, 1])
-        
+
         # fill continents 'coral' (with zorder=0), color wet areas 'aqua'
         mymap.drawmapboundary(fill_color='aqua')
 
@@ -140,7 +140,7 @@ class Plot:
 
         # Plot the past hour data
         plt.scatter(xp, yp, color='y', s=5, label="Past Hour")
-        
+
         # Now we start plotting interactively
         plt.ion()
         plt.scatter(x[0], y[0], color='#FF3F35', label="Real time")
@@ -164,14 +164,13 @@ class Plot:
 
     def run(self):
         self.running = True
-        
+
         # def to_thread():
         #     self.to_run()
 
         t_s = threading.Thread(target=self.to_run)
         t_s.setDaemon(True)
         t_s.start()
-
 
     def stop(self):
         self.running = False

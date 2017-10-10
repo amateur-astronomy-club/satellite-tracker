@@ -8,7 +8,7 @@ import ephem
 hardware = Hardware()
 hardware.connect()
 
-obj = SpaceObject(ephem.Jupiter())
+obj = SpaceObject('26702')
 alt, az = obj.getCoordinates()
 hardware.set_target(az, alt)
 
