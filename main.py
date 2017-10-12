@@ -14,6 +14,8 @@ hardware.set_target(az, alt)
 
 print hardware.run_loop()
 
+stopped = False
+
 while True:
     try:
         sleep(1)
@@ -23,5 +25,6 @@ while True:
 
     except KeyboardInterrupt:
         hardware.stop()
+        stopped = True
         break
-hardware.stop()
+if not stopped: hardware.stop()
