@@ -29,10 +29,12 @@ class Hardware:
 
     def set_motor(self, val):
         """write to base arduino"""
+
         val = int(val)
         if val > 255: val = 255  # value range of arduino analogWrite()
         if val < -255: val = -255
         self.base_arduino.write(str(val) + '\n')
+
 
     def read_mag(self):
         try:
@@ -64,6 +66,7 @@ class Hardware:
         return mag
 
     def stop_thread(self):
+        if not self.looping: return  # Can't shut down thread if it's not runnning
         print "Stopping Thread..."
         self.looping = False  # Shut down Thread
         while not self.thread_shutdown:  # wait for thread shut down
@@ -72,6 +75,7 @@ class Hardware:
         print "Successfully shut down thread..."
 
     def stop(self):
+        print
         self.stop_thread()
         self.top_arduino.close()
         self.base_arduino.close()
@@ -105,7 +109,7 @@ class Hardware:
         self.set_motor(self.pid.output)
         return error
 
-    def run_loop(self, period=0.01):
+    def run_loop(self, period=0.01, verbose=False):
         """
         :param period: time period of loop
         """
@@ -115,7 +119,8 @@ class Hardware:
         def to_run():
             while True:
                 if not self.looping: break  # stop thread
-                self.loop()
+                e = self.loop()
+                if verbose: print e
                 time.sleep(period)
             self.thread_shutdown = True
 
