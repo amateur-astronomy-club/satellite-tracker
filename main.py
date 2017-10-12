@@ -8,21 +8,18 @@ import ephem
 hardware = Hardware()
 hardware.connect()
 
-obj = SpaceObject('25544')
+obj = SpaceObject(ephem.Jupiter())
 alt, az = obj.getCoordinates()
 hardware.set_target(az, alt)
 
-counter = 0
+print hardware.run_loop()
+
 while True:
     try:
-        print hardware.loop()
-        sleep(0.01)
-        counter += 1
-        if counter == 100:
-            alt, az = obj.getCoordinates()
-            print alt, az
-            hardware.set_target(az, alt)
-            counter = 0
+        sleep(1)
+        alt, az = obj.getCoordinates()
+        print alt, az
+        hardware.set_target(az, alt)
 
     except KeyboardInterrupt:
         hardware.stop()
