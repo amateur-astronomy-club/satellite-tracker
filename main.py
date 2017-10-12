@@ -7,7 +7,7 @@ from finder import SpaceObject
 from hardware import Hardware
 
 hardware = Hardware()
-hardware.connect()
+hardware.connect(port2="COM5")
 
 obj = None
 known_objects = {"Mercury": ephem.Mercury(),
@@ -20,7 +20,9 @@ known_objects = {"Mercury": ephem.Mercury(),
                  "Pluto": ephem.Pluto(),
                  "Sun": ephem.Sun(),
                  "Moon": ephem.Moon(),
-                 "ISS": '25544'}
+                 "ISS": '25544',
+                 "Tiangong 1": "37820",
+                 "Tiangong 2": "41765"}
 
 
 def set_object():
