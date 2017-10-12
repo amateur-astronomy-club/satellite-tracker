@@ -1,6 +1,6 @@
 from time import sleep
 
-import ephem  # Don't Remove
+import ephem
 
 from app import object_setter
 from finder import SpaceObject
@@ -10,10 +10,17 @@ hardware = Hardware()
 hardware.connect()
 
 obj = None
-known_objects = {"Jupiter": ephem.Jupiter(), "Saturn": ephem.Saturn(),
-                 "Venus": ephem.Venus(), "Sun": ephem.Sun(),
-                 "Mars": ephem.Mars(), "Moon": ephem.Moon(),
-                 "Pluto": ephem.Pluto()}
+known_objects = {"Mercury": ephem.Mercury(),
+                 "Venus": ephem.Venus(),
+                 "Mars": ephem.Mars(),
+                 "Jupiter": ephem.Jupiter(),
+                 "Saturn": ephem.Saturn(),
+                 "Uranus": ephem.Uranus(),
+                 "Neptune": ephem.Neptune(),
+                 "Pluto": ephem.Pluto(),
+                 "Sun": ephem.Sun(),
+                 "Moon": ephem.Moon(),
+                 "ISS": '25544'}
 
 
 def set_object():
@@ -21,8 +28,6 @@ def set_object():
     http_text = obj_s.current_object
     if http_text is None:
         obj = None
-    elif http_text == "ISS":
-        obj = SpaceObject('25544')
     else:
         try:
             obj = SpaceObject(known_objects[http_text])
@@ -36,7 +41,7 @@ current_obj = obj_s.current_object
 
 hardware.set_target(0, 0)
 
-# hardware.run_loop(verbose=True)
+hardware.run_loop(verbose=True)
 
 while True:
     try:
@@ -54,9 +59,9 @@ while True:
 
         hardware.set_target(az, alt)
 
-        sleep(0.01)
+        sleep(1)
 
-        print hardware.loop()
+        # print hardware.loop()
 
     except KeyboardInterrupt:
         hardware.stop()
