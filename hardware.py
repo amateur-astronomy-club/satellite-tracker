@@ -6,7 +6,7 @@ from PID import PID
 class Hardware:
     def __init__(self):
         self.pid = PID(3, 2, 20)  # 3 0.8 20 # Trial and Error values
-        self.pid.setWindup(50)  # 100
+        self.pid.setWindup(75)  # 100
         self.top_arduino = None
         self.base_arduino = None
 
@@ -52,7 +52,7 @@ class Hardware:
     def convert_mag(self, mag):
         """Covert angle measured by magnetometer to azimuth convention (Clockwise from North)"""
         if mag != 0: mag = 360 - mag  # counter clockwise to clockwise
-        mag = mag - 26 + 30 + 20# fixed error of magnetometer
+        mag = mag - 26 + 30 + 20 - 5# fixed error of magnetometer
         if mag < 0: mag = 360 + mag  # warp around
         return mag
 

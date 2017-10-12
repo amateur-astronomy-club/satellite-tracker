@@ -38,7 +38,7 @@ class PID:
         elif (self.ITerm > self.windup_guard):
             self.ITerm = self.windup_guard
 
-        if abs(error) < 5: self.ITerm = 0
+        if abs(error) < 3: self.ITerm = 0
 
         self.DTerm = delta_error
 
