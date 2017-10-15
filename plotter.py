@@ -1,16 +1,16 @@
 import datetime
 import threading
-from datetime import timedelta
-
 import ephem
 import matplotlib.pyplot as plt
 import numpy as np
 from auromat.coordinates.spacetrack import Spacetrack
 from mpl_toolkits.basemap import Basemap
+from auromat.coordinates.spacetrack import Spacetrack
 from pathlib2 import Path
-
+from datetime import timedelta
 
 class Plot:
+
     """Plot class that iisused to nteractively plot real time position of satellite
   
     """
@@ -106,7 +106,7 @@ class Plot:
 
         # miller projection using Basemap
         mymap = Basemap(projection='mill', lon_0=180)
-        print "Here 3"
+
         # plot coastlines, draw label meridians and parallels.
         mymap.drawcoastlines()
         mymap.drawparallels(np.arange(-90, 90, 30), labels=[1, 0, 0, 0])
@@ -123,7 +123,7 @@ class Plot:
         # convert to map projection co-ordinates
         x, y = mymap(sat_lon, sat_lat)
         xp, yp = mymap(sat_lonp, sat_latp)
-        print "Here 3"
+
         # Convert to numpy arrays
         # atleast_1d makes sure arrays are atleast 1-d, unnecessary check for scalars
         x = np.atleast_1d(x)
@@ -133,7 +133,7 @@ class Plot:
 
         # compute night shade for the given date
         CS = mymap.nightshade(date)
-        print "Here 3"
+
         # Set some properties for the plot window
         mng = plt.get_current_fig_manager()
         mng.window.showMaximized()
@@ -141,10 +141,12 @@ class Plot:
         # Plot the past hour data
         plt.scatter(xp, yp, color='y', s=5, label="Past Hour")
 
+        
         # Now we start plotting interactively
         plt.ion()
         plt.scatter(x[0], y[0], color='#FF3F35', label="Real time")
-        print "Here 3"
+
+
         # Position legend and set transparency
         leg = plt.legend(fancybox=True, shadow=True, loc=4)
         leg.get_frame().set_alpha(0.1)
@@ -165,8 +167,9 @@ class Plot:
     def run(self):
         self.running = True
 
-        # def to_thread():
-        #     self.to_run()
+        #def to_thread():
+            #self.to_run()
+
 
         t_s = threading.Thread(target=self.to_run)
         t_s.setDaemon(True)
