@@ -21,8 +21,8 @@ Notes: Magnetometer Y axis isn't working. Using X and Z axis for orientation.
 ### Stellarium Integration
 * **Step 1.** `DONE` Check out interfaces for Stellarium Telescope
   Control Protocol.`[SkyPointer, Arduino-Telescope-Control]` (Can only seek, cannot track)
-* **Step 2.** **[IN PROGRESS}]** Check if data can be directly sent to the backend upon selection of
+* **Step 2.** `BUILT GUI INSTEAD` Check if data can be directly sent to the backend upon selection of
   object
 
 ### Online APIs
-* Check for Web APIs that will provide satellite data directly.
+* `ABANDONED IN FAVOUR OF WEB APP`Check for Web APIs that will provide satellite data directly.
