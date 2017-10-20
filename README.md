@@ -3,8 +3,6 @@ Satellite Tracker
 
 Github Repo of the satellite tracker built by AAC NITK as part of Astro Committee for Engineer 2016 and Engineer 2017.
 
-_**THIS IS A WORK IN PROGRESS** We are actively working on this Roadmap._
-
 ## Proposed updates for 2017
 
 ### Hardware updates
@@ -15,7 +13,7 @@ _**THIS IS A WORK IN PROGRESS** We are actively working on this Roadmap._
 * **Step 3.** `DONE` Get data the from sensor on the Arduino Nano.
 Notes: Magnetometer Y axis isn't working. Using X and Z axis for orientation.
 * **Step 4.** `DONE` Connect Arduino Nano to python server through Bluetooh. Notes: Used Serial COM.
-* **Step 5.** `DONE` Make Feedback loop controller for azimuth
+* **Step 5.** `DONE` Make Feedback loop controller for azimuth (PID)
 * **Step 6.** `POSTPONED FOR 2018` DO same for elevation (second axis)
 
 ### Stellarium Integration
