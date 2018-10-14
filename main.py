@@ -1,7 +1,8 @@
 from hardware.Control import Control
 from tracking import parser, update_tle, NITK
 from tracking.Tracker import Tracker
-from flask import Flask, render_template, request
+from flask import render_template, request
+from flask_app import app
 
 control = Control(freq=100, verbose=1)  # hardware control
 tracker = Tracker(home=NITK, freq=1, verbose=1)  # find position of objects in space
@@ -18,10 +19,9 @@ def set_position():
 
 tracker.set_callback(set_position)
 
+
 # Web App Flask UI
 # ===========================================================================================
-
-app = Flask(__name__, static_folder='flask_app/static', template_folder='flask_app/templates')
 
 
 @app.route('/')

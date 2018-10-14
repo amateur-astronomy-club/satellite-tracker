@@ -35,10 +35,10 @@ def load_tle():
     """
     Load saved TLE files
     """
-    with open(TLE_FILE_PATH, 'r') as f:
-        lines = f.readlines()
-
     try:
+        with open(TLE_FILE_PATH, 'r') as f:
+            lines = f.readlines()
+
         assert len(lines) % 3 == 0
     except:
         print("Coudn't Load TLE data...")
